@@ -1,0 +1,171 @@
+   # .gitignore — softplan_api (backend)
+# Regra: na dúvida, não commitar. Exceções explícitas com '!caminho' (ver CLAUDE.md).
+
+# =====================================================================
+# Dependências e builds
+# =====================================================================
+node_modules/
+dist/
+build/
+out/
+.vite/
+*.tsbuildinfo
+.eslintcache
+.cache/
+.turbo/
+
+# =====================================================================
+# Testes e cobertura
+# =====================================================================
+coverage/
+.nyc_output/
+junit*.xml
+test-results/
+playwright-report/
+
+# =====================================================================
+# Variáveis de ambiente e credenciais (NUNCA commitar)
+# Apenas o .env.example é versionado.
+# =====================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+
+# =====================================================================
+# Logs
+# =====================================================================
+logs/*
+!logs/.gitkeep
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =====================================================================
+# PDF e formatos relacionados (maiúsculas e minúsculas)
+# =====================================================================
+*.[pP][dD][fF]
+*.[fF][dD][fF]
+*.[xX][fF][dD][fF]
+*.[xX][dD][pP]
+*.[pP][sS]
+*.[eE][pP][sS]
+*.[xX][pP][sS]
+*.[oO][xX][pP][sS]
+*.[dD][jJ][vV][uU]
+
+# =====================================================================
+# Planilhas: Excel e variações (maiúsculas e minúsculas)
+# =====================================================================
+*.[xX][lL][sS]
+*.[xX][lL][sS][xX]
+*.[xX][lL][sS][mM]
+*.[xX][lL][sS][bB]
+*.[xX][lL][tT]
+*.[xX][lL][tT][xX]
+*.[xX][lL][tT][mM]
+*.[xX][lL][aA]
+*.[xX][lL][aA][mM]
+*.[xX][lL][wW]
+*.[xX][lL][rR]
+*.[oO][dD][sS]
+*.[nN][uU][mM][bB][eE][rR][sS]
+~$*.xls*
+
+# =====================================================================
+# Outros documentos de escritório
+# =====================================================================
+*.[dD][oO][cC]
+*.[dD][oO][cC][xX]
+*.[dD][oO][cC][mM]
+*.[dD][oO][tT][xX]
+*.[pP][pP][tT]
+*.[pP][pP][tT][xX]
+*.[pP][pP][sS][xX]
+*.[oO][dD][tT]
+*.[oO][dD][pP]
+*.[rR][tT][fF]
+*.[pP][aA][gG][eE][sS]
+*.[kK][eE][yY]
+~$*
+
+# =====================================================================
+# Imagens: JPG e variações (maiúsculas e minúsculas)
+# =====================================================================
+*.[jJ][pP][gG]
+*.[jJ][pP][eE][gG]
+*.[jJ][pP][eE]
+*.[jJ][fF][iI][fF]
+*.[hH][eE][iI][cC]
+*.[hH][eE][iI][fF]
+*.[bB][mM][pP]
+*.[tT][iI][fF]
+*.[tT][iI][fF][fF]
+*.[pP][sS][dD]
+
+# =====================================================================
+# Compactados e dumps
+# =====================================================================
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.sql
+*.dump
+*.bak
+*.tmp
+*.temp
+
+# =====================================================================
+# Sistema operacional (Windows / WSL / macOS / Linux)
+# =====================================================================
+*:Zone.Identifier
+*Zone.Identifier
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.directory
+.Trash-*
+*~
+.fuse_hidden*
+.nfs*
+
+# =====================================================================
+# Editores e IDEs
+# =====================================================================
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*.sublime-workspace
+.history/
+
+# =====================================================================
+# Ferramentas de IA (configurações locais de cada pessoa)
+# =====================================================================
+.claude/settings.local.json
+
+# =====================================================================
+# Específico da API
+# =====================================================================
+# Uploads/arquivos locais simulando o S3
+uploads/
+tmp/

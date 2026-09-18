@@ -1,0 +1,1005 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "1DOC — API de integração",
+    "description": "Nova camada de API multitenant do 1DOC. Obtenha um token em POST /auth/token e envie-o em Authorization: Bearer.",
+    "version": "0.1.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "tenantId": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-tenant-id",
+        "description": "Identificador do órgão (tenant)"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {}
+  },
+  "paths": {
+    "/auth/token": {
+      "post": {
+        "summary": "Troca e-mail e senha por um token de acesso (válido por 1 hora)",
+        "tags": [
+          "Autenticação"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "maxLength": 254,
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+                    "description": "E-mail do usuário no órgão"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "required": [
+                  "email",
+                  "senha"
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "tenantId": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "tokenType": {
+                      "type": "string",
+                      "enum": [
+                        "Bearer"
+                      ]
+                    },
+                    "expiresIn": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991,
+                      "description": "Validade do token em segundos (3600 = 1 hora)"
+                    }
+                  },
+                  "required": [
+                    "accessToken",
+                    "tokenType",
+                    "expiresIn"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/processos": {
+      "get": {
+        "summary": "Lista os processos do órgão (tenant) autenticado",
+        "tags": [
+          "Processos"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "default": 1,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "description": "Página (começa em 1)"
+          },
+          {
+            "schema": {
+              "default": 20,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "Itens por página (1 a 100)"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "em_andamento",
+                "concluido"
+              ]
+            },
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "description": "Filtra pelo status do processo"
+          }
+        ],
+        "security": [
+          {
+            "tenantId": [],
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Identificador único (UUID)"
+                          },
+                          "numero": {
+                            "type": "string",
+                            "description": "Número do processo"
+                          },
+                          "titulo": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "em_andamento",
+                              "concluido"
+                            ]
+                          },
+                          "criadoEm": {
+                            "type": "string",
+                            "description": "Data de criação em ISO 8601 (UTC)"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "numero",
+                          "titulo",
+                          "status",
+                          "criadoEm"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991,
+                      "description": "Total de itens considerando os filtros"
+                    },
+                    "page": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991,
+                      "description": "Página retornada"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "total",
+                    "page"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro padrão da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "TENANT_ID_OBRIGATORIO",
+                            "TENANT_ID_INVALIDO",
+                            "REQUISICAO_INVALIDA",
+                            "CREDENCIAIS_INVALIDAS",
+                            "TOKEN_AUSENTE",
+                            "TOKEN_INVALIDO",
+                            "TOKEN_EXPIRADO",
+                            "TENANT_NAO_AUTORIZADO",
+                            "TENANT_TOKEN_DIVERGENTE",
+                            "RECURSO_NAO_ENCONTRADO",
+                            "ROTA_NAO_ENCONTRADA",
+                            "RATE_LIMIT_EXCEDIDO",
+                            "ERRO_INTERNO"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Mensagem amigável em pt-BR, pronta para exibir ao usuário"
+                        },
+                        "requestId": {
+                          "type": "string",
+                          "description": "Identificador para rastrear o erro no log"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "campo": {
+                                "type": "string"
+                              },
+                              "mensagem": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "campo",
+                              "mensagem"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "retryAfterSeconds": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message",
+                        "requestId"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Erro padrão da API"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+import type { Processo } from '../../../../../../domain/processo/processo.entity.js';
+
+export const processosSeed: Processo[] = [
+  {
+    id: '14ba1c89-0b2f-4159-a26a-9fa318c26b49',
+    numero: 'FLN-2026/000100',
+    titulo: 'Solicitação de alvará de funcionamento',
+    status: 'em_andamento',
+    criadoEm: '2026-01-05T12:00:00.000Z',
+  },
+  {
+    id: 'beaef843-d8f1-488d-a73f-8addc1e1d80f',
+    numero: 'FLN-2026/000107',
+    titulo: 'Pedido de poda de árvore em via pública',
+    status: 'concluido',
+    criadoEm: '2026-01-22T13:13:00.000Z',
+  },
+  {
+    id: '72713472-7310-4e66-9630-71e0c4216a08',
+    numero: 'FLN-2026/000114',
+    titulo: 'Licença ambiental para construção',
+    status: 'em_andamento',
+    criadoEm: '2026-02-08T14:26:00.000Z',
+  },
+  {
+    id: 'defa6fd3-3dbc-41af-b250-c5bb97910ada',
+    numero: 'FLN-2026/000121',
+    titulo: 'Recurso de multa de trânsito municipal',
+    status: 'em_andamento',
+    criadoEm: '2026-02-25T15:39:00.000Z',
+  },
+  {
+    id: '6cfcf763-cc94-4634-9a3a-9ef7cb2f170d',
+    numero: 'FLN-2026/000128',
+    titulo: 'Solicitação de iluminação pública',
+    status: 'concluido',
+    criadoEm: '2026-03-14T16:52:00.000Z',
+  },
+  {
+    id: '2b6611d7-3ef3-4124-9578-bceec67129a9',
+    numero: 'FLN-2026/000135',
+    titulo: 'Pedido de certidão negativa de débitos',
+    status: 'em_andamento',
+    criadoEm: '2026-03-31T17:05:00.000Z',
+  },
+  {
+    id: '1930e1ec-6faf-40dd-b623-082a3ce23b50',
+    numero: 'FLN-2026/000142',
+    titulo: 'Regularização fundiária — Bairro Ingleses',
+    status: 'em_andamento',
+    criadoEm: '2026-04-17T12:18:00.000Z',
+  },
+  {
+    id: '1bbc31b5-c8fc-4cd3-87fa-45869f89e34a',
+    numero: 'FLN-2026/000149',
+    titulo: 'Autorização para evento na Beira-Mar',
+    status: 'concluido',
+    criadoEm: '2026-05-04T13:31:00.000Z',
+  },
+  {
+    id: '3b1ed630-5d98-4ec5-8ce8-c2d546fca134',
+    numero: 'FLN-2026/000156',
+    titulo: 'Reclamação sobre coleta de lixo',
+    status: 'em_andamento',
+    criadoEm: '2026-05-21T14:44:00.000Z',
+  },
+  {
+    id: '528e2a5c-5826-4b67-8e64-d900048d24ce',
+    numero: 'FLN-2026/000163',
+    titulo: 'Solicitação de vaga em creche municipal',
+    status: 'em_andamento',
+    criadoEm: '2026-06-07T15:57:00.000Z',
+  },
+  {
+    id: 'b44fea22-09e9-4840-96b4-5c5f34d8c582',
+    numero: 'FLN-2026/000170',
+    titulo: 'Pedido de isenção de IPTU',
+    status: 'concluido',
+    criadoEm: '2026-06-24T16:10:00.000Z',
+  },
+  {
+    id: 'bca90845-90be-4321-90da-00be4aa309fd',
+    numero: 'FLN-2026/000177',
+    titulo: 'Denúncia de obra irregular',
+    status: 'em_andamento',
+    criadoEm: '2026-07-11T17:23:00.000Z',
+  },
+];
