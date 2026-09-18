@@ -1,10 +1,13 @@
 name: CI
 
+# Roda a cada push em main/develop e em todo Pull Request para essas branches.
+# O nome do job ("Lint, tipos, testes e build") é o check exigido na proteção da main.
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}

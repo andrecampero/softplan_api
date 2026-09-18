@@ -98,8 +98,15 @@ pnpm-debug.log*
 ~$*
 
 # =====================================================================
-# Imagens: JPG e variações (maiúsculas e minúsculas)
+# Imagens (maiúsculas e minúsculas). Só docs/imgs/ é versionada: veja a
+# exceção no FIM deste arquivo.
 # =====================================================================
+*.[pP][nN][gG]
+*.[gG][iI][fF]
+*.[wW][eE][bB][pP]
+*.[aA][vV][iI][fF]
+*.[sS][vV][gG]
+*.[iI][cC][oO]
 *.[jJ][pP][gG]
 *.[jJ][pP][eE][gG]
 *.[jJ][pP][eE]
@@ -170,3 +177,14 @@ $RECYCLE.BIN/
 # Uploads/arquivos locais simulando o S3
 uploads/
 tmp/
+
+# =====================================================================
+# EXCEÇÃO: prints e imagens da documentação (README). Precisa ficar no fim,
+# depois das regras que ignoram imagens. Nenhuma outra pasta pode ter imagens.
+# =====================================================================
+!docs/imgs/*.[pP][nN][gG]
+!docs/imgs/*.[jJ][pP][gG]
+!docs/imgs/*.[jJ][pP][eE][gG]
+!docs/imgs/*.[gG][iI][fF]
+!docs/imgs/*.[wW][eE][bB][pP]
+!docs/imgs/*.[sS][vV][gG]
